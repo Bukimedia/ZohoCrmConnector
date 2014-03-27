@@ -1,5 +1,0 @@
-C:\Documentos\Visual Studio 2012\Projects\ZohoCrmConnector\ZohoCrmConnector\bin\Debug\ZohoCrmConnector.dll
-C:\Documentos\Visual Studio 2012\Projects\ZohoCrmConnector\ZohoCrmConnector\bin\Debug\ZohoCrmConnector.pdb
-C:\Documentos\Visual Studio 2012\Projects\ZohoCrmConnector\ZohoCrmConnector\obj\Debug\ZohoCrmConnector.csprojResolveAssemblyReference.cache
-C:\Documentos\Visual Studio 2012\Projects\ZohoCrmConnector\ZohoCrmConnector\obj\Debug\ZohoCrmConnector.dll
-C:\Documentos\Visual Studio 2012\Projects\ZohoCrmConnector\ZohoCrmConnector\obj\Debug\ZohoCrmConnector.pdb
