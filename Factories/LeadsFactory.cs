@@ -1,83 +1,132 @@
-﻿using ZohoCrmConnector.Factories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
-
+using ZohoCrmConnector.Entities;
 
 namespace ZohoCrmConnector.Factories
 {
-    public class LeadsFactory : ConectionFactory
+    public class LeadsFactory : RestSharpFactory
     {
-        public LeadsFactory(string recordId)
-            : base(recordId)
+        public LeadsFactory(string userToken)
+            : base(userToken)
         {
-            
+
         }
 
-        public Entities.leads Get(long leadID)
+        public List<Leads> getMyRecords()
         {
-            var userToken = "b447d78308ef09d3bb3da3849da90c71";
+            return this.getMyRecords<List<Leads>>("Leads");
+        }
 
-            RestClient client = new RestClient();
-            client.BaseUrl = "https://crm.zoho.com/crm/private/xml/";
+        public List<Leads> getMyRecords(Dictionary<string, string> parameters)
+        {
+            return this.getMyRecords<List<Leads>>("Leads", parameters);
+        }
 
-            RestRequest request = new RestRequest(Method.GET);
-            request.Resource = "{module}/{method}";
-            request.AddParameter("module", "Leads", ParameterType.UrlSegment);
-            request.AddParameter("method", "getRecords", ParameterType.UrlSegment);
-            request.AddParameter("authtoken", userToken);
-            request.AddParameter("scope", "crmapi");
-            request.AddParameter("newFormat", "1");
-            request.AddParameter("selectColumns", "All");
-            request.RootElement = "rows";
+        public List<Leads> getRecords()
+        {
+            return this.getRecords<List<Leads>>("Leads");
+        }
 
-            var response = client.Execute<Entities.leads>(request);
+        public List<Leads> getRecords(Dictionary<string, string> parameters)
+        {
+            return this.getRecords<List<Leads>>("Leads", parameters);
+        }
 
+        public Leads getRecordById(long LeadId)
+        {
+            return this.getRecordById<List<Leads>>("Leads", LeadId)[0];
+        }
 
-            return (Entities.leads) response;
+        public Leads getRecordById(long LeadId, Dictionary<string, string> parameters)
+        {
+            return this.getRecordById<Leads>("Leads", LeadId, parameters);
+        }
+
+        public bool insertRecords(List<Leads> listLeads)
+        {
+            return this.insertRecords("Leads", listLeads);
+        }
+
+        public bool insertRecords(List<Leads> listLeads, Dictionary<string, string> parameters)
+        {
+            return this.insertRecords("Leads", listLeads, parameters);
+        }
+
+        public bool updateRecords(long LeadId, List<Leads> listLeads)
+        {
+            return this.updateRecords("Leads", LeadId, listLeads);
+        }
+
+        public bool updateRecords(long LeadId, List<Leads> listLeads, Dictionary<string, string> parameters)
+        {
+            return this.updateRecords("Leads", LeadId, listLeads, parameters);
+        }
+
+        public List<Leads> getSearchRecords(string searchCondition)
+        {
+            return this.getSearchRecords<List<Leads>>("Leads", searchCondition);
+        }
+
+        public List<Leads> getSearchRecords(string searchCondition, Dictionary<string, string> parameters)
+        {
+            return this.getSearchRecords<List<Leads>>("Leads", searchCondition, parameters);
+        }
+
+        public List<Leads> getSearchRecordsByPDC(string searchColumn, string searchValue)
+        {
+            return this.getSearchRecordsByPDC<List<Leads>>("Leads", searchColumn, searchValue);
+        }
+
+        public List<Leads> getSearchRecordsByPDC(string searchColumn, string searchValue, Dictionary<string, string> parameters)
+        {
+            return this.getSearchRecordsByPDC<List<Leads>>("Leads", searchColumn, searchValue, parameters);
+        }
+
+        public List<Leads> getRelatedRecords(long id, string parentModule)
+        {
+            return this.getRelatedRecords<List<Leads>>("Leads", id, parentModule);
+        }
+
+        public List<Leads> getRelatedRecords(long id, string parentModule, Dictionary<string, string> parameters)
+        {
+            return this.getRelatedRecords<List<Leads>>("Leads", id, parentModule, parameters);
+        }
+
+        public Entities.Fields getFields()
+        {
+            return this.getFields("Leads");
+        }
+
+        public bool deleteRecords(long LeadId)
+        {
+            return this.deleteRecords("Leads", LeadId);
+        }
+
+        public bool downloadFile(long AttachmentId)
+        {
+            return this.downloadFile("Leads", AttachmentId);
+        }
+
+        public bool deleteFile(long AttachmentId)
+        {
+            return this.deleteFile("Leads", AttachmentId);
+        }
+
+        public bool uploadPhoto(long LeadId, string filePath)
+        {
+            return this.uploadPhoto("Leads", LeadId, filePath);
+        }
+
+        public bool downloadPhoto(long LeadId)
+        {
+            return this.downloadPhoto("Leads", LeadId);
+        }
+
+        public bool deletePhoto(long LeadId)
+        {
+            return this.deletePhoto("Leads", LeadId);
         }
     }
 }
-/*
-        public long leadID { get; set; }
-        public long smowerID { get; set; }
-        public long leadOwner { get; set; }
-        public string company { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        //public string designation { get; set; }
-        public string tittle { get; set; }
-        public string email { get; set; }
-        public string phone { get; set; }
-        public string fax { get; set; }
-        public string mobile { get; set; }
-        public string website { get; set; }
-        public long campaingSource { get; set; }
-        //public string leadSource { get; set; }
-        public string leadStatus { get; set; }
-        public string industry { get; set; }
-        public int numEmployees { get; set; }
-        public double annualRevenue { get; set; }
-        public string rating { get; set; }
-        public long smcreatorID { get; set; }
-        public string createdBY { get; set; }
-        public long modifiedID { get; set; }
-        public string modifiedBY { get; set; }
-        public DateTime created { get; set; }
-        public DateTime modified { get; set; }
-        public string street { get; set; }
-        public string city { get; set; }
-        public string state { get; set; }
-        public int zipCode { get; set; }
-        public string country { get; set; }
-        public string skypeID { get; set; }
-        public string description { get; set; }
-        public bool emailOptOut { get; set; }
-        public string salutation { get; set; }
-        public string emailSec { get; set; }
-        public DateTime lastActivity { get; set; }
-        public string twitter { get; set; }
- */
