@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZohoCrmConnector.Entities
 {
-    class Cases
+    public class Cases
     {
         public string CASEID { get; set; }
         public string SMOWNERID { get; set; }
@@ -34,23 +34,7 @@ namespace ZohoCrmConnector.Entities
         public string Internal_Comments { get; set; }
         public string Solution { get; set; }
 
-        /* Don't made it yet
-         * 
-         * public List<Comments> List_Comments { get; set; }
-         * 
-         * <FL val="Comments">
-         *      <comment no="1">
-         *         <FL val="Comment Content">
-         *             <![CDATA[ sfdgdgdfgdfg ]]>
-         *         </FL>
-         *         <FL val="Commented By">
-         *            <![CDATA[ Marcos Torrente ]]>
-         *         </FL>
-         *         <FL val="Commented Time">Apr 30, 2014 10:43:31 AM</FL>
-         *     </comment>
-         * </FL>
-         * 
-         * */
+        public List<AuxEntities.AuxComments> Comments { get; set; }
 
         public string Case_Number { get; set; }
         public string PRODUCTID { get; set; }

@@ -11,122 +11,137 @@ namespace ZohoCrmConnector.Factories
         public LeadsFactory(string userToken)
             : base(userToken)
         {
-
+            module = "Leads";
         }
 
         public List<Leads> getMyRecords()
         {
-            return this.getMyRecords<List<Leads>>("Leads");
+            return this.getMyRecords<List<Leads>>(module);
         }
 
         public List<Leads> getMyRecords(Dictionary<string, string> parameters)
         {
-            return this.getMyRecords<List<Leads>>("Leads", parameters);
+            return this.getMyRecords<List<Leads>>(module, parameters);
         }
 
         public List<Leads> getRecords()
         {
-            return this.getRecords<List<Leads>>("Leads");
+            return this.getRecords<List<Leads>>(module);
         }
 
         public List<Leads> getRecords(Dictionary<string, string> parameters)
         {
-            return this.getRecords<List<Leads>>("Leads", parameters);
+            return this.getRecords<List<Leads>>(module, parameters);
         }
 
         public Leads getRecordById(long LeadId)
         {
-            return this.getRecordById<List<Leads>>("Leads", LeadId)[0];
+            return this.getRecordById<List<Leads>>(module, LeadId)[0];
         }
 
         public Leads getRecordById(long LeadId, Dictionary<string, string> parameters)
         {
-            return this.getRecordById<Leads>("Leads", LeadId, parameters);
+            return this.getRecordById<Leads>(module, LeadId, parameters);
+        }
+
+        public List<Leads> getCVRecords(String cvName)
+        {
+            return this.getCVRecords<List<Leads>>(module, cvName);
+        }
+
+        public List<Leads> getCVRecords(String cvName, Dictionary<string, string> parameters)
+        {
+            return this.getCVRecords<List<Leads>>(module, cvName, parameters);
         }
 
         public bool insertRecords(List<Leads> listLeads)
         {
-            return this.insertRecords("Leads", listLeads);
+            return this.insertRecords(module, listLeads);
         }
 
         public bool insertRecords(List<Leads> listLeads, Dictionary<string, string> parameters)
         {
-            return this.insertRecords("Leads", listLeads, parameters);
+            return this.insertRecords(module, listLeads, parameters);
         }
 
         public bool updateRecords(long LeadId, List<Leads> listLeads)
         {
-            return this.updateRecords("Leads", LeadId, listLeads);
+            return this.updateRecords(module, LeadId, listLeads);
         }
 
         public bool updateRecords(long LeadId, List<Leads> listLeads, Dictionary<string, string> parameters)
         {
-            return this.updateRecords("Leads", LeadId, listLeads, parameters);
+            return this.updateRecords(module, LeadId, listLeads, parameters);
         }
 
         public List<Leads> getSearchRecords(string searchCondition)
         {
-            return this.getSearchRecords<List<Leads>>("Leads", searchCondition);
+            return this.getSearchRecords<List<Leads>>(module, searchCondition);
         }
 
         public List<Leads> getSearchRecords(string searchCondition, Dictionary<string, string> parameters)
         {
-            return this.getSearchRecords<List<Leads>>("Leads", searchCondition, parameters);
+            return this.getSearchRecords<List<Leads>>(module, searchCondition, parameters);
         }
 
         public List<Leads> getSearchRecordsByPDC(string searchColumn, string searchValue)
         {
-            return this.getSearchRecordsByPDC<List<Leads>>("Leads", searchColumn, searchValue);
+            return this.getSearchRecordsByPDC<List<Leads>>(module, searchColumn, searchValue);
         }
 
         public List<Leads> getSearchRecordsByPDC(string searchColumn, string searchValue, Dictionary<string, string> parameters)
         {
-            return this.getSearchRecordsByPDC<List<Leads>>("Leads", searchColumn, searchValue, parameters);
-        }
-
-        public List<Leads> getRelatedRecords(long id, string parentModule)
-        {
-            return this.getRelatedRecords<List<Leads>>("Leads", id, parentModule);
-        }
-
-        public List<Leads> getRelatedRecords(long id, string parentModule, Dictionary<string, string> parameters)
-        {
-            return this.getRelatedRecords<List<Leads>>("Leads", id, parentModule, parameters);
-        }
-
-        public Entities.Fields getFields()
-        {
-            return this.getFields("Leads");
+            return this.getSearchRecordsByPDC<List<Leads>>(module, searchColumn, searchValue, parameters);
         }
 
         public bool deleteRecords(long LeadId)
         {
-            return this.deleteRecords("Leads", LeadId);
+            return this.deleteRecords(module, LeadId);
+        }
+
+        public List<Leads> getRelatedRecords(long id, string parentModule)
+        {
+            return this.getRelatedRecords<List<Leads>>(module, id, parentModule);
+        }
+
+        public List<Leads> getRelatedRecords(long id, string parentModule, Dictionary<string, string> parameters)
+        {
+            return this.getRelatedRecords<List<Leads>>(module, id, parentModule, parameters);
+        }
+
+        public Fields getFields()
+        {
+            return this.getFields(module);
+        }
+
+        public bool uploadFile(long LeadId, string filePath)
+        {
+            return this.uploadFile(module, LeadId, filePath);
         }
 
         public bool downloadFile(long AttachmentId)
         {
-            return this.downloadFile("Leads", AttachmentId);
+            return this.downloadFile(module, AttachmentId);
         }
 
         public bool deleteFile(long AttachmentId)
         {
-            return this.deleteFile("Leads", AttachmentId);
+            return this.deleteFile(module, AttachmentId);
         }
 
         public bool uploadPhoto(long LeadId, string filePath)
         {
-            return this.uploadPhoto("Leads", LeadId, filePath);
+            return this.uploadPhoto(module, LeadId, filePath);
         }
 
         public bool downloadPhoto(long LeadId)
         {
-            return this.downloadPhoto("Leads", LeadId);
+            return this.downloadPhoto(module, LeadId);
         }
 
         public bool deletePhoto(long LeadId)
         {
-            return this.deletePhoto("Leads", LeadId);
+            return this.deletePhoto(module, LeadId);
         }
     }
 }

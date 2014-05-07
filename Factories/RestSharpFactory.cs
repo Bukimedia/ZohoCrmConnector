@@ -29,7 +29,7 @@ namespace ZohoCrmConnector.Factories
         {
             this.module = module;
             this.method = method;
-            RestRequest request = new RestRequest(Method.GET);
+            RestRequest request = new RestRequest(Method.POST);
             request.Resource = "{module}/{method}";
             request.AddParameter("module", module, ParameterType.UrlSegment);
             request.AddParameter("method", method, ParameterType.UrlSegment);
@@ -115,13 +115,31 @@ namespace ZohoCrmConnector.Factories
             return ExecuteQuery<T>(request).Data;
         }
 
+        protected T getCVRecords<T>(string module, String cvName) where T : new()
+        {
+            RestRequest request = buildRequest(module, "getCVRecords");
+            request.AddParameter("cvName", cvName);
+            return ExecuteQuery<T>(request).Data;
+        }
+
+        protected T getCVRecords<T>(string module, String cvName, Dictionary<string, string> parameters) where T : new()
+        {
+            RestRequest request = buildRequest(module, "getCVRecords");
+            request.AddParameter("cvName", cvName);
+            foreach (KeyValuePair<string, string> pair in parameters)
+            {
+                request.AddParameter(pair.Key, pair.Value);
+            }
+            return ExecuteQuery<T>(request).Data;
+        }
+
         protected bool insertRecords<T>(string module, List<T> listEntity)
         {
             RestRequest request = buildRequest(module, "insertRecords");
             request.AddParameter("xmlData", buildXML<T>(listEntity));
             return ExecuteInsert(request);
         }
-        //me quedo aqui//
+
         protected bool insertRecords<T>(string module, List<T> listEntity, Dictionary<string, string> parameters)
         {
             RestRequest request = buildRequest(module, "insertRecords");
@@ -159,7 +177,7 @@ namespace ZohoCrmConnector.Factories
             request.AddParameter("selectColumns", "All");
             request.AddParameter("searchCondition", "("+searchCondition+")");
             return ExecuteQuery<T>(request).Data;
-        }//getSearchRecordsByPDC
+        }
 
         protected T getSearchRecords<T>(string module, string searchCondition, Dictionary<string, string> parameters) where T : new()
         {
@@ -216,48 +234,6 @@ namespace ZohoCrmConnector.Factories
             return extractFields(response.Content);
         }
 
-        private Fields extractFields(String xmlContent)
-        {
-            Fields campos = new Fields();
-
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.LoadXml(xmlContent);
-
-            XmlNodeList elemento = xDoc.GetElementsByTagName(module);
-
-            for(int i=0; i< elemento.Item(0).ChildNodes.Count;i++)
-            {
-                campos.listSections.Add(new Fields.Section());
-                campos.listSections.ElementAt(i).name = elemento.Item(0).ChildNodes.Item(i).Attributes.Item(0).Value;
-                campos.listSections.ElementAt(i).dv = elemento.Item(0).ChildNodes.Item(i).Attributes.Item(1).Value;
-                if (elemento.Item(0).ChildNodes.Item(i).ChildNodes.Count > 0)
-                {
-                    for (int j = 0; j < elemento.Item(0).ChildNodes.Item(i).ChildNodes.Count; j++)
-                    {
-                        campos.listSections.ElementAt(i).listFields.Add(new Fields.Section.Field());
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).req = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(0).Value;
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).type = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(1).Value;
-                        if (campos.listSections.ElementAt(i).listFields.ElementAt(j).type.Equals("Pick List"))
-                        {
-                            for (int k = 0; k < elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).ChildNodes.Count; k++)
-                            {
-                                campos.listSections.ElementAt(i).listFields.ElementAt(j).listValues.Add(new Fields.Section.Field.Value());
-                                campos.listSections.ElementAt(i).listFields.ElementAt(j).listValues.ElementAt(k).val =
-                                    elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).ChildNodes.Item(k).InnerText;
-                            }
-                        }
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).isreadonly = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(2).Value;
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).maxlength = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(3).Value;
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).label = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(4).Value;
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).dv = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(5).Value;
-                        campos.listSections.ElementAt(i).listFields.ElementAt(j).customfield = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(6).Value;
-                    }
-                }
-            }
-
-            return campos;
-        }
-
         protected T getRelatedRecords<T>(string module, long id, string parentModule, Dictionary<string, string> parameters) where T : new()
         {
             RestRequest request = buildRequest(module, "getRelatedRecords");
@@ -274,6 +250,19 @@ namespace ZohoCrmConnector.Factories
         {
             RestRequest request = buildRequest(module, "deleteRecords");
             request.AddParameter("id", id);
+            return ExecuteInsert(request);
+        }
+
+        protected bool uploadFile(string module, long id, string filePath)
+        {
+            RestRequest request = buildRequest(module, "uploadFile");
+            request.AddParameter("id", id);
+            request.AddFile("content", filePath);
+
+            //FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            //BinaryReader reader = new BinaryReader(stream);
+            //request.AddParameter("content",reader.ReadBytes(Convert.ToInt32(stream.Length)));
+
             return ExecuteInsert(request);
         }
 
@@ -304,25 +293,14 @@ namespace ZohoCrmConnector.Factories
         protected bool uploadPhoto(string module, long id, string filePath)
         {
             RestRequest request = buildRequest(module, "uploadPhoto");
+            //request.Method = Method.POST;
             request.AddParameter("id", id);
-
-            //long letter = 0;
-            FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            BinaryReader reader = new BinaryReader(stream);
-
-            //byte[] chunk;
-            //chunk = reader.ReadBytes(Convert.ToInt32(stream.Length));
-
-            String chunk = "";
-            for (int i = 0; i < stream.Length; i++)
-            {
-                chunk += reader.ReadByte();
-            }
-            reader.Close();
-            stream.Close();
-
-            request.AddParameter("content", reader.ToString());
-
+            request.AddFile("content", filePath);
+            //FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            //BinaryReader reader = new BinaryReader(stream);
+            //byte[] chunk = reader.ReadBytes(Convert.ToInt32(stream.Length));
+            //request.AddParameter("content", );
+            
             return ExecuteInsert(request);
         }
 
@@ -360,7 +338,67 @@ namespace ZohoCrmConnector.Factories
             newResponse.Content = convertXML(response.Content);
             response.Data = new XmlDeserializer().Deserialize<T>(newResponse);
 
-            return response.Data; 
+            return response.Data;
+        }
+
+        private void ModifyForException(string XMLtoEdit)
+        {
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(XMLtoEdit);
+            xDoc.LoadXml(xDoc.ChildNodes[1].InnerXml);
+            ThrowException(xDoc);
+        }
+
+        private void ThrowException(XmlDocument xDoc)
+        {
+            var Exception = new ApplicationException(
+                       xDoc.FirstChild.Name + ": " +
+                       xDoc.FirstChild.ChildNodes[0].Name + " - " +
+                       xDoc.FirstChild.ChildNodes[0].InnerText + ", " +
+                       xDoc.FirstChild.ChildNodes[1].InnerText);
+            throw Exception;
+        }
+
+        private Fields extractFields(String xmlContent)
+        {
+            Fields fields = new Fields();
+
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(xmlContent);
+
+            XmlNodeList elemento = xDoc.GetElementsByTagName(module);
+
+            for (int i = 0; i < elemento.Item(0).ChildNodes.Count; i++)
+            {
+                fields.listSections.Add(new Fields.Section());
+                fields.listSections.ElementAt(i).name = elemento.Item(0).ChildNodes.Item(i).Attributes.Item(0).Value;
+                fields.listSections.ElementAt(i).dv = elemento.Item(0).ChildNodes.Item(i).Attributes.Item(1).Value;
+                if (elemento.Item(0).ChildNodes.Item(i).ChildNodes.Count > 0)
+                {
+                    for (int j = 0; j < elemento.Item(0).ChildNodes.Item(i).ChildNodes.Count; j++)
+                    {
+                        fields.listSections.ElementAt(i).listFields.Add(new Fields.Section.Field());
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).req = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(0).Value;
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).type = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(1).Value;
+                        if (fields.listSections.ElementAt(i).listFields.ElementAt(j).type.Equals("Pick List"))
+                        {
+                            for (int k = 0; k < elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).ChildNodes.Count; k++)
+                            {
+                                fields.listSections.ElementAt(i).listFields.ElementAt(j).listValues.Add(new Fields.Section.Field.Value());
+                                fields.listSections.ElementAt(i).listFields.ElementAt(j).listValues.ElementAt(k).val =
+                                    elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).ChildNodes.Item(k).InnerText;
+                            }
+                        }
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).isreadonly = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(2).Value;
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).maxlength = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(3).Value;
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).label = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(4).Value;
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).dv = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(5).Value;
+                        fields.listSections.ElementAt(i).listFields.ElementAt(j).customfield = elemento.Item(0).ChildNodes.Item(i).ChildNodes.Item(j).Attributes.Item(6).Value;
+                    }
+                }
+            }
+
+            return fields;
         }
 
 
@@ -383,24 +421,6 @@ namespace ZohoCrmConnector.Factories
             return success;
         }
 
-        private void ModifyForException(string XMLtoEdit)
-        {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.LoadXml(XMLtoEdit);
-            xDoc.LoadXml(xDoc.ChildNodes[1].InnerXml);
-            ThrowException(xDoc);
-        }
-
-        private void ThrowException(XmlDocument xDoc)
-        {
-            var Exception = new ApplicationException(
-                       xDoc.FirstChild.Name + ": " +
-                       xDoc.FirstChild.ChildNodes[0].Name + " - " +
-                       xDoc.FirstChild.ChildNodes[0].InnerText + ", " +
-                       xDoc.FirstChild.ChildNodes[1].InnerText);
-            throw Exception;
-        }
-
         private String buildXML<T>(List<T> list)
         {
             String xmlDoc = "<" + module + ">";
@@ -412,9 +432,9 @@ namespace ZohoCrmConnector.Factories
 
                 for (int j = 0; j < properties.Count(); j++)
                 {
-                    if (properties[j].GetValue(list[i], null) != null)
+                    if (properties[j].GetValue(list[i],null) != null)
                     {
-                        xmlDoc += "<FL val=\"" + properties[j].Name.Replace("_", " ") + "\">" + properties[j].GetValue(list[i], null) + "</FL>";
+                        xmlDoc += "<FL val=\"" + properties[j].Name.Replace("_", " ") + "\">" + properties[j].GetValue(list[i],null) + "</FL>";
                     }
                 }
                 xmlDoc += "</row>";
@@ -433,17 +453,38 @@ namespace ZohoCrmConnector.Factories
                 xDoc.LoadXml(xDoc.GetElementsByTagName("response").Item(0).InnerXml);
                 ThrowException(xDoc);
             }
-            
+
             string xmldoc = "";
 
             for (int i = 0; i < row.Count; i++)
             {
-                XmlNodeList elemento = ((XmlElement)row[i]).GetElementsByTagName("FL");
+                XmlNodeList elemento = ((XmlElement)row[i]).ChildNodes;
                 xmldoc += "<" + module + ">";
                 foreach (XmlElement subnodo in elemento)
                 {
                     string atributo = subnodo.GetAttribute("val").Replace(' ', '_');
-                    xmldoc += "<" + atributo + ">" + subnodo.InnerText + "</" + atributo + ">";
+                    String fff = subnodo.LastChild.ToString();
+
+                    if (subnodo.LastChild.ToString().Equals("System.Xml.XmlElement"))
+                    {
+                        xmldoc += "<" + atributo + ">";
+                        for (int j = 0; j < subnodo.ChildNodes.Count; j++)
+                        {
+                            XmlNodeList subelemento = ((XmlElement)subnodo.ChildNodes[j]).GetElementsByTagName("FL");
+                            xmldoc += "<" + subnodo.FirstChild.Name + ">";
+                            foreach (XmlElement sub_nodo in subelemento)
+                            {
+                                string atributo2 = sub_nodo.GetAttribute("val").Replace(' ', '_');
+                                xmldoc += "<" + atributo2 + ">" + sub_nodo.InnerText + "</" + atributo2 + ">";
+                            }
+                            xmldoc += "</" + subnodo.FirstChild.Name + ">";
+                        }
+                        xmldoc += "</" + atributo + ">";
+                    }
+                    else
+                    {
+                        xmldoc += "<" + atributo + ">" + subnodo.InnerText + "</" + atributo + ">";
+                    }
                 }
                 xmldoc += "</" + module + ">";
             }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZohoCrmConnector.Entities
 {
-    class Accounts
+    public class Accounts
     {
         public string ACCOUNTID { get; set; }
         public string SMOWNERID { get; set; }

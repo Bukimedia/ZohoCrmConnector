@@ -13,7 +13,6 @@ namespace ZohoCrmConnector.Entities
         public string Company { get; set; }
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
-        //public string designation { get; set; }
         public string Designation { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -21,7 +20,6 @@ namespace ZohoCrmConnector.Entities
         public string Mobile { get; set; }
         public string Website { get; set; }
         public string Lead_Source { get; set; }
-        //public string leadSource { get; set; }
         public string Lead_Status { get; set; }
         public string Industry { get; set; }
         public string No_of_Employees { get; set; }

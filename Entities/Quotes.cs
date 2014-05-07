@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZohoCrmConnector.Entities
 {
-    class Quotes
+    public class Quotes
     {
         public string QUOTEID { get; set; }
         public string SMOWNERID { get; set; }
@@ -39,33 +39,7 @@ namespace ZohoCrmConnector.Entities
         public string Billing_Country { get; set; }
         public string Shipping_Country { get; set; }
 
-        public string Product_Details { get; set; }
-
-        /* Don't made it yet
-         * 
-         * public List<Products> List_Products { get; set; }
-         *
-         * <FL val="Product Details">
-         *     <product no="1">
-         *         <FL val="Product Id">1122040000000090054</FL>
-         *         <FL val="Product Name">
-         *             <![CDATA[ Acer Ferrari 3200 Notebook Computer PC ]]>
-         *         </FL>
-         *         <FL val="Unit Price">2000.0</FL>
-         *         <FL val="Quantity">1.0</FL>
-         *         <FL val="Quantity in Stock">10.0</FL>
-         *         <FL val="Total">1750.0</FL>
-         *         <FL val="Discount">175.0</FL>
-         *         <FL val="Total After Discount">1575.0</FL>
-         *         <FL val="List Price">1750.0</FL>
-         *         <FL val="Net Total">1575.0</FL>
-         *         <FL val="Tax">0.0</FL>
-         *         <FL val="Product Description">
-         *             <![CDATA[ sdgdfgsdfg ]]>
-         *         </FL>
-         *     </product>
-         *     <product no="2">...</product>
-         * </FL>*/
+        public List<AuxEntities.AuxProducts> Product_Details { get; set; }
 
         public string Quote_Owner { get; set; }
         public string Sub_Total { get; set; }
