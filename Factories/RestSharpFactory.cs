@@ -266,14 +266,14 @@ namespace ZohoCrmConnector.Factories
             return ExecuteInsert(request);
         }
 
-        protected bool downloadFile(string module, long id)
+        protected bool downloadFile(string module, long id, string filePath)
         {
             RestRequest request = buildRequest(module, "downloadFile");
             request.AddParameter("id", id);
             var response = client.Execute(request);
-            string fileName = "file_" + id + ".png";
+            string fileName = response.Headers[9].Value.ToString().Substring(28, response.Headers[9].Value.ToString().Length - 28);
             // data a ser guardada
-            FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream stream = new FileStream(filePath + fileName, FileMode.OpenOrCreate, FileAccess.Write);
             BinaryWriter writer = new BinaryWriter(stream);
             // números son guardados en formáto UTF-8 format (4 bytes)
             writer.Write(response.RawBytes);
@@ -304,14 +304,14 @@ namespace ZohoCrmConnector.Factories
             return ExecuteInsert(request);
         }
 
-        protected bool downloadPhoto(string module, long id)
+        protected bool downloadPhoto(string module, long id, string filePath)
         {
             RestRequest request = buildRequest(module, "downloadPhoto");
             request.AddParameter("id", id);
             var response = client.Execute(request);
-            string fileName = "photo_"+id+".png";
+            string fileName = response.Headers[9].Value.ToString().Substring(28, response.Headers[9].Value.ToString().Length - 28) + ".png";
             // data a ser guardada
-            FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream stream = new FileStream(filePath + fileName, FileMode.OpenOrCreate, FileAccess.Write);
             BinaryWriter writer = new BinaryWriter(stream);
             // números son guardados en formáto UTF-8 format (4 bytes)
             writer.Write(response.RawBytes);

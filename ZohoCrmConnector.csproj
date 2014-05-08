@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Accounts.cs" />
+    <Compile Include="Entities\Attachments.cs" />
     <Compile Include="Entities\AuxEntities\AuxComments.cs" />
     <Compile Include="Entities\AuxEntities\AuxProducts.cs" />
     <Compile Include="Entities\Calls.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Entities\Fields.cs" />
     <Compile Include="Entities\Invoices.cs" />
     <Compile Include="Entities\Leads.cs" />
+    <Compile Include="Entities\Notes.cs" />
     <Compile Include="Entities\Potentials.cs" />
     <Compile Include="Entities\PriceBooks.cs" />
     <Compile Include="Entities\Products.cs" />
@@ -70,10 +72,12 @@
     <Compile Include="Entities\Users.cs" />
     <Compile Include="Entities\Vendors.cs" />
     <Compile Include="Factories\AccountsFactory.cs" />
+    <Compile Include="Factories\AttachmentsFactory.cs" />
     <Compile Include="Factories\CallsFactory.cs" />
     <Compile Include="Factories\CampaignsFactory.cs" />
     <Compile Include="Factories\CasesFactory.cs" />
     <Compile Include="Factories\ContactsFactory.cs" />
+    <Compile Include="Factories\NotesFactory.cs" />
     <Compile Include="Factories\TasksFactory.cs" />
     <Compile Include="Factories\EventsFactory.cs" />
     <Compile Include="Factories\PurchaseOrdersFactory.cs" />

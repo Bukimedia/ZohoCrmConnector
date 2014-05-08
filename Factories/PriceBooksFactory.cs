@@ -121,27 +121,17 @@ namespace ZohoCrmConnector.Factories
 
         public bool downloadFile(long AttachmentId)
         {
-            return this.downloadFile(module, AttachmentId);
+            return this.downloadFile(module, AttachmentId, "");
+        }
+
+        public bool downloadFile(long AttachmentId, string filePath)
+        {
+            return this.downloadFile(module, AttachmentId, filePath);
         }
 
         public bool deleteFile(long AttachmentId)
         {
             return this.deleteFile(module, AttachmentId);
-        }
-
-        public bool uploadPhoto(long PriceBookId, string filePath)
-        {
-            return this.uploadPhoto(module, PriceBookId, filePath);
-        }
-
-        public bool downloadPhoto(long PriceBookId)
-        {
-            return this.downloadPhoto(module, PriceBookId);
-        }
-
-        public bool deletePhoto(long PriceBookId)
-        {
-            return this.deletePhoto(module, PriceBookId);
         }
     }
 }
