@@ -271,6 +271,10 @@ namespace ZohoCrmConnector.Factories
             RestRequest request = buildRequest(module, "downloadFile");
             request.AddParameter("id", id);
             var response = client.Execute(request);
+            if (response.Content.Contains("<error><code>") || response.ResponseStatus == ResponseStatus.Error)
+            {
+                ModifyForException(response.Content);
+            }
             string fileName = response.Headers[9].Value.ToString().Substring(28, response.Headers[9].Value.ToString().Length - 28);
             // data a ser guardada
             FileStream stream = new FileStream(filePath + fileName, FileMode.OpenOrCreate, FileAccess.Write);
@@ -309,6 +313,10 @@ namespace ZohoCrmConnector.Factories
             RestRequest request = buildRequest(module, "downloadPhoto");
             request.AddParameter("id", id);
             var response = client.Execute(request);
+            if (response.Content.Contains("<error><code>") || response.ResponseStatus == ResponseStatus.Error)
+            {
+                ModifyForException(response.Content);
+            }
             string fileName = response.Headers[9].Value.ToString().Substring(28, response.Headers[9].Value.ToString().Length - 28) + ".png";
             // data a ser guardada
             FileStream stream = new FileStream(filePath + fileName, FileMode.OpenOrCreate, FileAccess.Write);
