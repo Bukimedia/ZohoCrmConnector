@@ -64,13 +64,17 @@ namespace ZohoCrmConnector.Factories
             return this.insertRecords(module, listCalls, parameters);
         }
 
-        public bool updateRecords(long CallId, List<Calls> listCalls)
+        public bool updateRecords(long CallId, Calls Call)
         {
+            List<Calls> listCalls = new List<Calls>();
+            listCalls.Add(Call);
             return this.updateRecords(module, CallId, listCalls);
         }
 
-        public bool updateRecords(long CallId, List<Calls> listCalls, Dictionary<string, string> parameters)
+        public bool updateRecords(long CallId, Calls Call, Dictionary<string, string> parameters)
         {
+            List<Calls> listCalls = new List<Calls>();
+            listCalls.Add(Call);
             return this.updateRecords(module, CallId, listCalls, parameters);
         }
 
