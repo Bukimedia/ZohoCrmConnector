@@ -82,6 +82,7 @@
     <Compile Include="Factories\EventsFactory.cs" />
     <Compile Include="Factories\PurchaseOrdersFactory.cs" />
     <Compile Include="Factories\SalesOrdersFactory.cs" />
+    <Compile Include="Factories\UsersFactory.cs" />
     <Compile Include="Factories\VendorsFactory.cs" />
     <Compile Include="Factories\InvoicesFactory.cs" />
     <Compile Include="Factories\QuotesFactory.cs" />

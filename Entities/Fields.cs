@@ -7,22 +7,22 @@ namespace ZohoCrmConnector.Entities
 {
     public class Fields
     {
-        public List<Section> listSections { get; set; }
+        public Dictionary<string, Section> listSections { get; set; }
 
         public Fields()
         {
-            listSections = new List<Section>();
+            listSections = new Dictionary<string,Section>();
         }
 
         public class Section
         {
             public string name { get; set; }
             public string dv { get; set; }
-            public List<Field> listFields { get; set; }
+            public Dictionary<string, Field> listFields { get; set; }
 
             public Section()
             {
-                listFields = new List<Field>();
+                listFields = new Dictionary<string, Field>();
             }
 
             public class Field
